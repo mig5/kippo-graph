@@ -1,216 +1,209 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head profile="http://gmpg.org/xfn/11">
-<title>Kippo-Graph | Fast Visualization for your Kippo SSH Honeypot Stats</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta http-equiv="imagetoolbar" content="no" />
-<link rel="stylesheet" href="styles/layout.css" type="text/css" />
-<script type="text/javascript" src="scripts/jquery-1.4.1.min.js"></script>
-</head>
-<body id="top">
-<div class="wrapper">
-  <div id="header">
-    <h1><a href="index.php">Kippo-Graph</a></h1>
-    <br/><p>Fast Visualization for your Kippo SSH Honeypot Stats</p>
-  </div>
-</div>
-<!-- ####################################################################################################### -->
-<div class="wrapper">
-  <div id="topbar">
-    <div class="fl_left">Version: 0.9 | Website: <a href="http://bruteforce.gr/kippo-graph">bruteforce.gr/kippo-graph</a></div>
-    <br class="clear" />
-  </div>
-</div>
-<!-- ####################################################################################################### -->
-<div class="wrapper">
-  <div id="topnav">
-    <ul class="nav">
-      <li><a href="index.php">Homepage</a></li>
-      <li class="active"><a href="kippo-graph.php">Kippo-Graph</a></li>
-	  <li><a href="kippo-input.php">Kippo-Input</a></li>
-	  <li><a href="kippo-geo.php">Kippo-Geo</a></li>
-      <li class="last"><a href="gallery.php">Graph Gallery</a></li>
-    </ul>
-    <div class="clear"></div>
-  </div>
-</div>
-<!-- ####################################################################################################### -->
-<div class="wrapper">
-  <div class="container">
-    <div class="whitebox">
-      <!-- ############################# -->
-	  <h2>Overall honeypot activity</h2>
-	  <hr />
-<?php
+﻿<?php
 #Package: Kippo-Graph
 #Version: 0.9
 #Author: ikoniaris
 #Website: bruteforce.gr/kippo-graph
 
 require_once('config.php');
-require_once('class/KippoGraph.class.php');
+include(DIR_ROOT . '/html/header.html');
+include(DIR_ROOT . '/html/nav.html');
 
-$kippoGraph = new KippoGraph();
-
-//Let's create all the charts! (generated-graphs folder)
-$kippoGraph->createTop10Passwords();
-$kippoGraph->createTop10Usernames();
-$kippoGraph->createTop10Combinations();
-$kippoGraph->createSuccessRation();
-$kippoGraph->createMostSuccessfulLoginsPerDay();
-$kippoGraph->createSuccessesPerDay();
-$kippoGraph->createSuccessesPerWeek();
-$kippoGraph->createNumberOfConnectionsPerIP();
-$kippoGraph->createSuccessfulLoginsFromSameIP();
-$kippoGraph->createMostProbesPerDay();
-$kippoGraph->createProbesPerDay();
-$kippoGraph->createProbesPerWeek();
-$kippoGraph->createTop10SSHClients();
-
-//-----------------------------------------------------------------------------------------------------------------
-//OVERALL HONEYPOT ACTIVITY
-//-----------------------------------------------------------------------------------------------------------------
-$kippoGraph->printOverallHoneypotActivity();
-
-echo '<br /><br />';
 ?>
-	  <h2>Graphical statistics generated from your Kippo honeypot database<br/><!--For more, visit the other pages/components of this package--></h2>
-      <div class="portfolio">
-        <div class="fl_left">
-          <h2>Top 10 passwords</h2>
-          <p>This vertical bar chart displays the top 10 passwords that attackers try when attacking the system.</p>
-		  <p><a href="export.php?type=Pass">CSV of all distinct passwords</a><p>
-        </div>
-        <div class="fl_right"><img src="generated-graphs/top10_passwords.png" alt="" /></div>
-        <div class="clear"></div>
-      </div>
-      <!-- ############################# -->
-      <div class="portfolio">
-        <div class="fl_left">
-          <h2>Top 10 usernames</h2>
-          <p>This vertical bar chart displays the top 10 usernames that attackers try when attacking the system.</p>
-		  <p><a href="export.php?type=User">CSV of all distinct Usernames</a><p>
-        </div>
-        <div class="fl_right"><img src="generated-graphs/top10_usernames.png" alt="" /></div>
-        <div class="clear"></div>
-      </div>
-      <!-- ############################# -->
-      <div class="portfolio">
-        <div class="fl_left">
-          <h2>Top 10 user-pass combos</h2>
-          <p>This vertical bar chart displays the top 10 username and password combinations that attackers try when attacking the system.</p>
-		  <p><a href="export.php?type=Combo">CSV of all distinct combinations</a><p>
-        </div>
-        <div class="fl_right"><img src="generated-graphs/top10_combinations.png" alt="" /></div>
-		<div class="fl_left">
-          <p>This pie chart displays the top 10 username and password combinations that attackers try when attacking the system.</p>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span2">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">Graph selection</li>
+              <li class="active"><a href="#top10pass">Top 10 passwords</a></li>
+              <li><a href="#top10user">Top 10 usernames</a></li>
+              <li><a href="#top10userpasscombo">Top 10 user-pass combos</a></li>
+              <li><a href="#successratio">Success ratio</a>
+              <li><a href="#successdayweek">Successes per day/week</a>
+              <li><a href="#connsperip">Connections per IP</a>
+              <li><a href="#successloginssameip">Successful logins from the same IP</a>
+              <li><a href="#probesperdayweek">Probes per day/week</a>
+              <li><a href="#top10ssh">Top 10 SSH clients</a>
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
 
-        </div>
-		<div class="fl_right"><img src="generated-graphs/top10_combinations_pie.png" alt="" /></div>
-        <div class="clear"></div>
-      </div>
-      <!-- ############################# -->
-      <div class="portfolio">
-        <div class="fl_left">
-          <h2>Success ratio</h2>
-          <p>This vertical bar chart displays the overall attack success ratio for the particular honeypot system.</p>
-		  <p><a href="export.php?type=Success">CSV of all successfull attacks</a><p>
-        </div>
-        <div class="fl_right"><img src="generated-graphs/success_ratio.png" alt="" /></div>
-        <div class="clear"></div>
-      </div>
-      <!-- ############################# -->
-      <div class="portfolio">
-        <div class="fl_left">
-          <h2>Successes per day/week</h2>
-          <p>This vertical bar chart displays the most successful break-ins per day (Top 20) for the particular honeypot system. The numbers indicate how many times correct credentials were given by attackers.</p>
-			<p><a href="export.php?type=SuccessLogon">CSV of all successful logons</a><p>
-		  </div>
-        <div class="fl_right"><img src="generated-graphs/most_successful_logins_per_day.png" alt="" /></div>
-		<div class="clear"></div>
-		<div class="fl_left">
-          <p>This line chart displays the daily successes on the honeypot system. Spikes indicate successful entries over a weekly period.<br/><br/><strong>Warning:</strong> Dates with zero successes are not displayed.</p>
-			<p><a href="export.php?type=SuccessDay">CSV of daily successes</a><p>
-		</div>
-        <div class="fl_right"><img src="generated-graphs/successes_per_day.png" alt="" /></div>
-        <div class="clear"></div>
-		<div class="fl_left">
-          <p>This line chart displays the weekly successes on the honeypot system. Curves indicate successful entries over a weekly period.</p>
-		  <p><a href="export.php?type=SuccessWeek">CSV of weekly successes</a><p>
-        </div>
-        <div class="fl_right"><img src="generated-graphs/successes_per_week.png" alt="" /></div>
-        <div class="clear"></div>
-	  </div>
-      <!-- ############################# -->
-      <div class="portfolio">
-        <div class="fl_left">
-          <h2>Connections per IP</h2>
-          <p>This vertical bar chart displays the top 10 unique IPs ordered by the number of overall connections to the system.</p>
-		  <p><a href="export.php?type=IP">CSV of all connections per IP</a><p>
-        </div>
-        <div class="fl_right"><img src="generated-graphs/connections_per_ip.png" alt="" /></div>
-        <div class="fl_left">
-          <p>This pie chart displays the top 10 unique IPs ordered by the number of overall connections to the system.</p>
-        </div>
-        <div class="fl_right"><img src="generated-graphs/connections_per_ip_pie.png" alt="" /></div>
-		<div class="clear"></div>
-      </div>
-	  <!-- ############################# -->
-      <div class="portfolio">
-        <div class="fl_left">
-          <h2>Successful logins from the same IP</h2>
-          <p>This vertical bar chart displays the number of successful logins from the same IP address (Top 20). The numbers indicate how many times the particular source opened a successful session.</p>
-		  <p><a href="export.php?type=SuccessIP">CSV of all successful IPs</a><p>
-        </div>
-        <div class="fl_right"><img src="generated-graphs/logins_from_same_ip.png" alt="" /></div>
-        <div class="clear"></div>
-      </div>
-      <!-- ############################# -->
-      <div class="portfolio">
-        <div class="fl_left">
-          <h2>Probes per day/week</h2>
-          <p>This horizontal bar chart displays the most probes per day (Top 20) against the honeypot system.</p>
-        </div>
-        <div class="fl_right"><img src="generated-graphs/most_probes_per_day.png" alt="" /></div>
-		<div class="fl_left">
-          <p>This line chart displays the daily activity on the honeypot system. Spikes indicate hacking attempts.<br/><br/><strong>Warning:</strong> Dates with zero probes are not displayed.</p>
-		  <p><a href="export.php?type=ProbesDay">CSV of all probes per day</a><p>
-        </div>
-        <div class="fl_right"><img src="generated-graphs/probes_per_day.png" alt="" /></div>
-		<div class="fl_left">
-          <p>This line chart displays the weekly activity on the honeypot system. Curves indicate hacking attempts over a weekly period.</p>
-		  <p><a href="export.php?type=ProbesWeek">CSV of all probes per week</a><p>
-        </div>
-        <div class="fl_right"><img src="generated-graphs/probes_per_week.png" alt="" /></div>
-        <div class="clear"></div>
-      </div>
-      <!-- ############################# -->
-      <div class="portfolio">
-        <div class="fl_left">
-          <h2>Top 10 SSH clients</h2>
-          <p>This vertical bar chart displays the top 10 SSH clients used by attackers during their hacking attempts.</p>
-		  <p><a href="export.php?type=SSH">CSV of all SSH clients</a><p>
-        </div>
-        <div class="fl_right"><img src="generated-graphs/top10_ssh_clients.png" alt="" /></div>
-        <div class="clear"></div>
-      </div>
-      <div class="clear"></div>
-    </div>
-  </div>
-</div>
-<!-- ####################################################################################################### -->
-<div class="wrapper">
-  <div id="copyright">
-    <p class="fl_left">Copyright &copy; 2011 - 2013 - All Rights Reserved - <a href="http://bruteforce.gr/kippo-graph">Kippo-Graph</a></p>
-    <p class="fl_right">Thanks to <a href="http://www.os-templates.com/" title="Free Website Templates">OS Templates</a></p>
-    <br class="clear" />
-  </div>
-</div>
-<script type="text/javascript" src="scripts/superfish.js"></script>
-<script type="text/javascript">
-jQuery(function () {
-    jQuery('ul.nav').superfish();
-});
-</script>
-</body>
-</html>
+        <div class="span10">
+          <div class="row-fluid">
+            <div class="span3">
+              <a name="top10pass"><h3>Top 10 passwords</h3></a>
+              <p>This vertical bar chart displays the top 10 passwords that attackers try when attacking the system.</p>
+              <p><a href="utils/export.php?type=Pass">CSV of all distinct passwords</a></p>
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/top10_passwords.png" alt="" />
+            </div>
+
+          </div><!--/row-->
+
+          <div class="row-fluid">
+            <div class="span3">
+              <a name="top10user"><h3>Top 10 usernames</h3></a>
+              <p>This vertical bar chart displays the top 10 usernames that attackers try when attacking the system.</p>
+              <p><a href="utils/export.php?type=User">CSV of all distinct Usernames</a></p>
+           </div>
+
+            <div class="span7">
+              <img src="generated-graphs/top10_usernames.png" alt="" />
+           </div>
+          </div><!--/row-->
+
+          <div class="row-fluid">
+            <div class="span3">
+              <a name="top10userpasscombo"><h3>Top 10 user-pass combos</h3></a>
+              <p>This vertical bar chart displays the top 10 username and password combinations that attackers try when attacking the system.</p>
+              <p><a href="utils/export.php?type=Combo">CSV of all distinct combinations</a></p>
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/top10_combinations.png" alt="" />
+            </div>
+          </div><!--/row-->
+
+          <div class="row-fluid">
+            <div class="span3">
+              <p>This pie chart displays the top 10 username and password combinations that attackers try when attacking the system</p>
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/top10_combinations_pie.png" alt="" />
+            </div>
+          </div><!--/row-->
+
+
+          <div class="row-fluid">
+            <div class="span3">
+              <a name="successratio"><h3>Success ratio</h3></a>
+              <p>This vertical bar chart displays the overall attack success ratio for the particular honeypot system.</p>
+              <p><a href="utils/export.php?type=Success">CSV of all successfull attacks</a></p>
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/success_ratio.png" alt="" />
+            </div>
+          </div><!--/row-->
+
+
+          <div class="row-fluid">
+            <div class="span3">
+              <a name="successdayweek"><h3>Successes per day/week</h3></a>
+              <p>This vertical bar chart displays the most successful break-ins per day (Top 20) for the particular honeypot system. The numbers indicate how many times correct credentials were given by attackers</p>
+              <p><a href="utils/export.php?type=SuccessLogon">CSV of all successful logons</a></p>
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/most_successful_logins_per_day.png" alt="" />
+            </div>
+          </div><!--/row-->
+
+          <div class="row-fluid">
+            <div class="span3">
+              <p>This line chart displays the daily successes on the honeypot system. Spikes indicate successful entries over a weekly period.<br/><br/><strong>Warning:</strong> Dates with zero successes are not displayed.</p>
+              <p><a href="utils/export.php?type=SuccessDay">CSV of daily successes</a></p>
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/successes_per_day.png" alt="" />
+            </div>
+          </div><!--/row-->
+
+          <div class="row-fluid">
+            <div class="span3">
+              <p>This line chart displays the weekly successes on the honeypot system. Curves indicate successful entries over a weekly period.</p>
+              <p><a href="utils/export.php?type=SuccessWeek">CSV of weekly successes</a></p>
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/successes_per_week.png" alt="" />
+            </div>
+          </div><!--/row-->
+
+          <div class="row-fluid">
+            <div class="span3">
+              <a name="connsperip"><h3>Connections per IP</h3></a>
+              <p>This vertical bar chart displays the top 10 unique IPs ordered by the number of overall connections to the system.</p>
+              <p><a href="utils/export.php?type=IP">CSV of all connections per IP</a></p>
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/connections_per_ip.png" alt="" />
+            </div>
+          </div><!--/row-->
+
+          <div class="row-fluid">
+            <div class="span3">
+              <p>This pie chart displays the top 10 unique IPs ordered by the number of overall connections to the system.</p>
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/connections_per_ip_pie.png" alt="" />
+            </div>
+          </div><!--/row-->
+
+          <div class="row-fluid">
+            <div class="span3">
+              <a name="successloginssameip"><h3>Successful logins from the same IP</h3></a>
+              <p>This vertical bar chart displays the number of successful logins from the same IP address (Top 20). The numbers indicate how many times the particular source opened a successful session.</p>
+              <p><a href="utils/export.php?type=SuccessIP">CSV of all successful IPs</a></p>
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/logins_from_same_ip.png" alt="" />
+            </div>
+          </div><!--/row-->
+
+          <div class="row-fluid">
+            <div class="span3">
+              <a name="probesperdayweek"><h3>Probes per day/week</h3></a>
+              <p>This horizontal bar chart displays the most probes per day (Top 20) against the honeypot system.</p>
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/most_probes_per_day.png" alt="" />
+            </div>
+          </div><!--/row-->
+
+          <div class="row-fluid">
+            <div class="span3">
+              <p>This line chart displays the daily activity on the honeypot system. Spikes indicate hacking attempts.<br/><br/><strong>Warning:</strong> Dates with zero probes are not displayed.</p>
+              <p><a href="utils/export.php?type=ProbesDay">CSV of all probes per day</a></p>
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/probes_per_day.png" alt="" />
+            </div>
+          </div><!--/row-->
+
+          <div class="row-fluid">
+            <div class="span3">
+              <p>This line chart displays the weekly activity on the honeypot system. Curves indicate hacking attempts over a weekly period.</p>
+              <p><a href="utils/export.php?type=ProbesWeek">CSV of all probes per week</a></p>
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/probes_per_week.png" alt="" />
+            </div>
+          </div><!--/row-->
+
+          <div class="row-fluid">
+            <div class="span3">
+              <a name="top10ssh"><h3>Top 10 SSH clients</h3></a>
+              <p>This vertical bar chart displays the top 10 SSH clients used by attackers during their hacking attempts.</p>
+              <p><a href="utils/export.php?type=SSH">CSV of all SSH clients</a></p> 
+            </div>
+
+            <div class="span7">
+              <img src="generated-graphs/top10_ssh_clients.png" alt="" />
+            </div>
+          </div><!--/row-->
+
+        </div><!--/span-->
+      </div><!--/row-->
+
+<?php include(DIR_ROOT . '/html/footer.html'); ?>

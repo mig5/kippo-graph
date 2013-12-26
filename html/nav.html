@@ -1,0 +1,25 @@
+<?php include_once(DIR_ROOT . '/lib/functions/versionCheck.php');?>
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="index.php">Kippo Graph</a>
+          <div class="nav-collapse collapse">
+            <p class="navbar-text pull-right">
+              <?php report_version(); ?>
+            </p>
+            <ul class="nav">
+              <li><a href="kippo-graph.php">Kippo Graph</a></li>
+              <li><a href="kippo-input.php">Kippo Input</a></li>
+              <li><a href="kippo-geo.php">Kippo Geo</a></li>
+              <li><a href="about.php">About</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>

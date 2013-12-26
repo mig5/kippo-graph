@@ -1,0 +1,11 @@
+table tbody td.icon{
+    border-left: none;
+    padding-right: 15px;
+}
+
+table td img.icon {
+    float: left;
+    height: 16px;
+    width: 16px;
+}
+

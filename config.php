@@ -1,4 +1,5 @@
-﻿<?php
+<?php
+
 #Package: Kippo-Graph
 #Version: 0.9
 #Author: ikoniaris
@@ -15,7 +16,7 @@ define('DIR_ROOT', '/var/www/kippo-graph');
 #en: English | fr: French | de: German | it: Italian | es: Spanish
 #nl: Dutch | el: Greek | et: Estonian | pl: Polish | sv: Swedish
 #ar: Arabic (currently not working)
-require_once('include/languages/lang.en.php');
+require_once('lib/languages/lang.en.php');
 
 #You will have to change the following four definitions
 #from the default values to the correct ones, according
@@ -30,7 +31,7 @@ define('DB_PORT', '3306');
 
 #The following value determines whether Kippo-Graph would
 #automatically check if a newer version is available for download.
-#You can inspect the function at include/misc/versionCheck.php.
+#You can inspect the function at lib/functions/versionCheck.php.
 #It works by comparing the latest version number that resides
 #in a text file uploaded on Kippo-Graph's website against the
 #'VERSION' definition inside versionCheck.php. If the local
@@ -44,4 +45,3 @@ define('DB_PORT', '3306');
 #Change NO to YES if you want to enable it.
 define('UPDATE_CHECK', 'NO');
 
-?>
